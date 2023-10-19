@@ -2,7 +2,7 @@
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 
-namespace StackListEmployee
+namespace Lab8OOPGenericCollections
 {
     internal class Program
     {

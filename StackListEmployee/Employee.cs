@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StackListEmployee
+namespace Lab8OOPGenericCollections
 {
     internal class Employee //Class where objects can have the following variables
     {
