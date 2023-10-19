@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace StackListEmployee
 {
-    internal class Employee
+    internal class Employee //Class where objects can have the following variables
     {
         public int ID { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
         public int Salary { get; set; }
 
-        public Employee(int id, string name, string gender, int salary)
+        public Employee(int id, string name, string gender, int salary) //Constructor with required variables for objects
         {
             ID = id;
             Name = name;

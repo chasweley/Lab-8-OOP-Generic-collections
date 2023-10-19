@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 
 namespace StackListEmployee
 {
@@ -6,73 +8,113 @@ namespace StackListEmployee
     {
         static void Main(string[] args)
         {
-            Employee e1 = new Employee(101, "Charlotte", "Female", 35000); //Creating new objects to Employee class
-            Employee e2 = new Employee(102, "Vera", "Female", 50000);
-            Employee e3 = new Employee(103, "Jan", "Male", 29000);
-            Employee e4 = new Employee(104, "Anton", "Male", 45000);
-            Employee e5 = new Employee(105, "Maja", "Female", 60000);
+            Employee employee1 = new Employee(101, "Charlotte", "Female", 35000); //Creating new objects to Employee class
+            Employee employee2 = new Employee(102, "Vera", "Female", 50000);
+            Employee employee3 = new Employee(103, "Jan", "Male", 29000);
+            Employee employee4 = new Employee(104, "Anton", "Male", 45000);
+            Employee employee5 = new Employee(105, "Maja", "Female", 60000);
 
-            Stack<Employee> employees = new Stack<Employee>(); //Creating new stack
+            //Part 1 Stack
+            Console.WriteLine("Part 1:");
 
-            employees.Push(e1); //Adding above created objects to stack
-            employees.Push(e2);
-            employees.Push(e3);
-            employees.Push(e4);
-            employees.Push(e5);
+            Stack<Employee> employeeStack = new Stack<Employee>(); //Creating new stack
 
-            Console.WriteLine($"Objects in stack: {employees.Count}"); //Writes out amount of objects in stack
-            foreach (Employee e in employees) //Loop for writng out all objects in stack
+            employeeStack.Push(employee1); //Adding objects to stack
+            employeeStack.Push(employee2);
+            employeeStack.Push(employee3);
+            employeeStack.Push(employee4);
+            employeeStack.Push(employee5);
+
+            Console.WriteLine("Retrieve using foreach loop");
+            foreach (Employee employee in employeeStack) //Loop for writnig out all objects in stack
             {
-                Console.WriteLine($"{e.ID} - {e.Name} - {e.Gender} - {e.Salary}");
-                Console.WriteLine($"Objects left in stack: {employees.Count}");
+                PrintEmployeeInfo(employee); //Method to print employee info
+                PrintObjectsInStack(employeeStack.Count); //Method to print info on number of objects left in stack
             }
 
             Console.WriteLine("------------------------------"); //Separator
 
             Console.WriteLine("Retrieve using Pop method");
-            while (employees.Count > 0) //Loop for writing out object which also is removed
+            while (employeeStack.Count > 0) //Loop for writing out object which also is removed
             {
-                Employee ePop = employees.Pop(); //Empties the stack one by one
-                Console.WriteLine($"{ePop.ID} - {ePop.Name} - {ePop.Gender} - {ePop.Salary}"); //Writes out everything in last object that is removed
-                Console.WriteLine($"Objects left in stack: {employees.Count}"); //Checks objects left in stack
+                PrintEmployeeInfo(employeeStack.Pop()); //Empties the stack one by one and prints info
+                PrintObjectsInStack(employeeStack.Count); //Prints info on objects left in stack
             }
+            
+            employeeStack.Push(employee1); //Adding objects to stack again after Pop method removed them
+            employeeStack.Push(employee2);
+            employeeStack.Push(employee3);
+            employeeStack.Push(employee4);
+            employeeStack.Push(employee5);
 
-            employees.Push(e1); //Adding objects to stack again after Pop method removed them
-            employees.Push(e2);
-            employees.Push(e3);
-            employees.Push(e4);
-            employees.Push(e5);
-
-            Console.WriteLine("------------------------------"); //Separator
+            Console.WriteLine("------------------------------");
 
             Console.WriteLine("Retrieve using Peek method");
-            for (int i = 0;  i < 2; i++) //Loop for looking at latest added object to stack for 2 iterations
+            for (int i = 0; i < 2; i++) //Loop for looking at latest added object to stack for 2 iterations
             {
-                Employee ePeek = employees.Peek(); //Looks (peeks) at the latest object in stack
-                Console.WriteLine($"{ePeek.ID} - {ePeek.Name} - {ePeek.Gender} - {ePeek.Salary}"); //Writes out everything in latest object
-                Console.WriteLine($"Objects left in stack: {employees.Count}"); //Checks objects left in stack
+                PrintEmployeeInfo(employeeStack.Peek()); //Looks (peeks) at the latest object in stack and prints info
+                PrintObjectsInStack(employeeStack.Count); //Prints info on objects left in stack
             }
 
-            Console.WriteLine("------------------------------"); //Separator
+            Console.WriteLine("------------------------------");
 
-            if (employees.Contains(e3))
+            if (employeeStack.Contains(employee3)) //If loop to check if e3 is in stack and print depending on true/false
             {
-                Console.WriteLine("Found employee, e3 is in stack.");
+                Console.WriteLine("Employee3 exists in the Stack.");
             }
             else
             {
-                Console.WriteLine("Not found.");
+                Console.WriteLine("Employee3 does not exist in the Stack.");
             }
 
-            //static void PrintEmployees(IEnumerable<Employee> ids)
-            //{
-            //    foreach (Employee i in ids)
-            //    {
-            //        Console.WriteLine($"{i.ID} - {i.Name} - {i.Gender} - {i.Salary}");
-            //    }
-            //}
+            //Part 2 List
+            Console.WriteLine("\nPart 2:");
 
+            List<Employee> employeeList = new List<Employee>(); //Creating new list
 
+            employeeList.Add(employee1); //Adding objects to list
+            employeeList.Add(employee2);
+            employeeList.Add(employee3);
+            employeeList.Add(employee4);
+            employeeList.Add(employee5);
+
+            if (employeeList.Contains(employee2)) //If loop to check if e2 is in list and print depending on true/false
+            {
+                Console.WriteLine("Employee2 object exists in the List.");
+            }
+            else
+            {
+                Console.WriteLine("Employee2 object does not exist in the List");
+            }
+
+            Console.WriteLine();
+
+            Employee firstMaleEmployee = employeeList.Find((employee) => employee.Gender == "Male"); //Create list with first employee object that have male gender
+            PrintEmployeeInfo(firstMaleEmployee); //Print object in new list with employee information
+            
+            Console.WriteLine();
+
+            List<Employee> maleEmployeeList = employeeList.FindAll((employee) => employee.Gender == "Male"); //Create list with all employee objects that have male gender
+
+            foreach (Employee maleEmployee in maleEmployeeList) //Prints out all objects in list
+            {
+                PrintEmployeeInfo(maleEmployee);
+            }
         }
+
+        //Methods
+
+        static void PrintEmployeeInfo(Employee e) //Method to write out all information in object
+        {
+            Console.WriteLine($"ID: {e.ID}, Name: {e.Name}, Gender: {e.Gender}, Salary: {e.Salary}"); 
+        }
+
+        static void PrintObjectsInStack(int stackSize) //Method to print number of objects left in stack
+        {
+            Console.WriteLine($"Objects left in the Stack: {stackSize}");
+        }
+
     }
+
+
 }
